@@ -1,0 +1,50 @@
+.table
+  .row.row__header
+    .cell.cell__item Наименование
+    .cell.cell__amount Количество
+    .cell.cell__price Цена
+    .cell.cell__action Редактирование / Удалить
+
+  .row__wrapper(v-for="(record, index) in records")
+
+    .row(v-if="record.show")
+      .cell.cell__item {{ record.name }}
+      .cell.cell__amount {{ record.amount }}
+      .cell.cell__price {{ record.price }}
+      .cell.cell__action
+        i.flaticon-square(v-on:click="editRow(index)")
+        i.flaticon-interface(v-on:click="deleteRow(index)")
+
+    .row.row__edit(v-else v-on:keypress.enter="saveRow(index)" v-on:keyup.esc="cancel")
+      .cell.cell__item
+        input(type="text" v-model="stash.name")
+      .cell.cell__amount
+        input(type="number" v-model="stash.amount")
+      .cell.cell__price
+        input(type="number" v-model="stash.price")
+      .cell.cell__action
+        i.flaticon-interface-1(v-on:click="saveRow(index)")
+        i.flaticon-interface(v-on:click="cancel")
+
+    .row(v-if="record.error")
+      .cell.cell__error Пожалуйста, заполните все поля
+
+  .row.row__add(v-if="form" v-on:keypress.enter="addForm" v-on:keyup.esc="cancel")
+    .cell.cell__item
+      input(type="text" v-model="stash.name")
+    .cell.cell__amount
+      input(type="number" v-model="stash.amount")
+    .cell.cell__price
+      input(type="number" v-model="stash.price")
+    .cell.cell__action
+      i.flaticon-interface-1(v-on:click="addForm")
+      i.flaticon-interface(v-on:click="cancel")
+
+  .row(v-if="formError")
+    .cell.cell__error Пожалуйста, заполните все поля
+
+  .row.row__footer
+    .cell.cell__stub Итoг
+    .cell.cell__total {{ totalPrice }}
+    .cell.cell__add-button
+      i.flaticon-black(v-on:click="showForm()")
